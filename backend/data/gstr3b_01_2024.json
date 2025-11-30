@@ -1,0 +1,55 @@
+{
+  "gstin": "29AABCT1234A1Z5",
+  "ret_period": "012024",
+  "filing_date": null,
+  "generated_at": "2025-11-30T05:39:56.485816",
+  "table_3_1": {
+    "intra_state_supplies": {
+      "taxable_value": 0,
+      "igst": 0,
+      "cgst": 0,
+      "sgst": 0,
+      "cess": 0
+    },
+    "inter_state_supplies": {
+      "taxable_value": 0,
+      "igst": 0,
+      "cgst": 0,
+      "sgst": 0,
+      "cess": 0
+    },
+    "total_taxable_value": 0,
+    "total_tax": 0
+  },
+  "table_3_2": {
+    "zero_rated_supplies": 0,
+    "exports": 0,
+    "supplies_to_sez": 0,
+    "deemed_exports": 0
+  },
+  "table_4": {
+    "itc_on_imports": 0,
+    "itc_on_capital_goods": 0,
+    "itc_on_inputs": 0,
+    "itc_on_input_services": 0,
+    "total_itc": 0
+  },
+  "table_5": {
+    "exempt_supplies": 0,
+    "nil_rated_supplies": 0,
+    "non_gst_supplies": 0
+  },
+  "table_6": {
+    "igst_payable": 0,
+    "cgst_payable": 0,
+    "sgst_payable": 0,
+    "cess_payable": 0,
+    "total_tax_payable": 0
+  },
+  "summary": {
+    "total_sales": 0,
+    "total_tax_on_sales": 0,
+    "total_purchases": 0,
+    "net_tax_liability": 0
+  }
+}

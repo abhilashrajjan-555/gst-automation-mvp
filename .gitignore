@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env
+
+# Node
+node_modules/
+.next/
+out/
+build/
+dist/
+.env.local
+.DS_Store
+
+# Data (Don't commit local data)
+backend/data/invoices/*.json
+backend/uploads/*
+!backend/uploads/.gitkeep

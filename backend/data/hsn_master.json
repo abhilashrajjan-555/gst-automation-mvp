@@ -1,0 +1,584 @@
+[
+  {
+    "hsn": "8471",
+    "description": "Automatic data processing machines (computers, laptops)",
+    "keywords": ["computer", "laptop", "desktop", "pc", "macbook", "dell", "hp", "lenovo"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8517",
+    "description": "Telephones, smartphones, mobile phones",
+    "keywords": ["phone", "mobile", "smartphone", "iphone", "samsung", "oneplus", "vivo"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8528",
+    "description": "Monitors, projectors, televisions",
+    "keywords": ["monitor", "display", "screen", "projector", "tv", "television", "lcd", "led"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8443",
+    "description": "Printers, scanners, photocopiers",
+    "keywords": ["printer", "scanner", "copier", "photocopier", "multifunction", "inkjet", "laser"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8504",
+    "description": "Power banks, adapters, chargers, UPS",
+    "keywords": ["power bank", "charger", "adapter", "ups", "inverter", "battery backup"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "3926",
+    "description": "Plastic products, containers, bags",
+    "keywords": ["plastic", "container", "bag", "bottle", "polybag", "packaging"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "4820",
+    "description": "Notebooks, registers, stationery",
+    "keywords": ["notebook", "register", "diary", "stationery", "paper", "notepad"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "9403",
+    "description": "Office furniture, chairs, tables, desks",
+    "keywords": ["chair", "table", "desk", "furniture", "cabinet", "rack", "shelf"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9405",
+    "description": "Lamps, lights, LED bulbs",
+    "keywords": ["lamp", "light", "bulb", "led", "tube light", "lighting", "fixture"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "6109",
+    "description": "T-shirts, clothing, apparel",
+    "keywords": ["tshirt", "shirt", "clothing", "apparel", "garment", "wear"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "6404",
+    "description": "Footwear, shoes, sandals",
+    "keywords": ["shoe", "footwear", "sandal", "slipper", "boot", "sneaker"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "9983",
+    "description": "Accounting, auditing, bookkeeping services",
+    "keywords": ["accounting", "audit", "bookkeeping", "ca", "chartered accountant", "tax filing"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9973",
+    "description": "Software development, IT services",
+    "keywords": ["software", "development", "programming", "coding", "it services", "web design"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9996",
+    "description": "Digital marketing, advertising services",
+    "keywords": ["marketing", "advertising", "seo", "social media", "google ads", "promotion"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9972",
+    "description": "Consulting, advisory services",
+    "keywords": ["consulting", "advisory", "consultancy", "business consulting", "strategy"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "1001",
+    "description": "Wheat, grains, cereals",
+    "keywords": ["wheat", "grain", "cereal", "atta", "flour"],
+    "gst_rate": 0
+  },
+  {
+    "hsn": "1006",
+    "description": "Rice, basmati, non-basmati",
+    "keywords": ["rice", "basmati", "chawal", "paddy"],
+    "gst_rate": 0
+  },
+  {
+    "hsn": "0713",
+    "description": "Pulses, lentils, dal",
+    "keywords": ["pulse", "lentil", "dal", "moong", "chana", "toor"],
+    "gst_rate": 0
+  },
+  {
+    "hsn": "1701",
+    "description": "Sugar, sweeteners",
+    "keywords": ["sugar", "sweetener", "cheeni"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "1511",
+    "description": "Palm oil, cooking oil",
+    "keywords": ["oil", "cooking oil", "palm oil", "edible oil"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "0901",
+    "description": "Coffee beans, coffee powder",
+    "keywords": ["coffee", "bean", "powder", "instant coffee"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "0902",
+    "description": "Tea, tea leaves, chai",
+    "keywords": ["tea", "chai", "tea leaves", "green tea", "black tea"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "2106",
+    "description": "Food preparations, ready to eat meals",
+    "keywords": ["ready to eat", "instant", "noodles", "pasta", "meal"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "2202",
+    "description": "Packaged drinking water, soft drinks",
+    "keywords": ["water", "soft drink", "juice", "beverage", "cola", "packaged water"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "3004",
+    "description": "Medicines, pharmaceuticals, drugs",
+    "keywords": ["medicine", "drug", "pharmaceutical", "tablet", "capsule", "syrup"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "3303",
+    "description": "Perfumes, cosmetics, beauty products",
+    "keywords": ["perfume", "cosmetic", "beauty", "makeup", "fragrance"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "3401",
+    "description": "Soap, detergent, cleaning products",
+    "keywords": ["soap", "detergent", "cleaner", "washing", "liquid"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "3307",
+    "description": "Shaving cream, toothpaste, personal care",
+    "keywords": ["toothpaste", "shaving cream", "personal care", "dental", "oral"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "4901",
+    "description": "Books, printed books, publications",
+    "keywords": ["book", "publication", "printed book", "novel", "textbook"],
+    "gst_rate": 0
+  },
+  {
+    "hsn": "4911",
+    "description": "Calendars, posters, printed materials",
+    "keywords": ["calendar", "poster", "brochure", "pamphlet", "flyer"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "6302",
+    "description": "Bed linen, towels, linens",
+    "keywords": ["bed linen", "towel", "bedsheet", "blanket", "pillow cover"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "7323",
+    "description": "Utensils, cookware, kitchen items",
+    "keywords": ["utensil", "cookware", "pan", "pot", "kadai", "tawa", "kitchen"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "7326",
+    "description": "Iron and steel products, hardware",
+    "keywords": ["iron", "steel", "hardware", "metal", "bolt", "screw", "nail"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8301",
+    "description": "Locks, padlocks, keys",
+    "keywords": ["lock", "padlock", "key", "door lock", "security"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8481",
+    "description": "Taps, valves, fittings",
+    "keywords": ["tap", "valve", "faucet", "fitting", "plumbing"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8516",
+    "description": "Electric heaters, water heaters, geysers",
+    "keywords": ["heater", "geyser", "water heater", "electric heater", "immersion rod"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8418",
+    "description": "Refrigerators, freezers, cooling equipment",
+    "keywords": ["refrigerator", "fridge", "freezer", "cooler", "cooling"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8509",
+    "description": "Mixer, grinder, food processor",
+    "keywords": ["mixer", "grinder", "food processor", "blender", "juicer"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8414",
+    "description": "Fans, air conditioners, coolers",
+    "keywords": ["fan", "air conditioner", "ac", "cooler", "ventilator"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "8450",
+    "description": "Washing machines, laundry equipment",
+    "keywords": ["washing machine", "washer", "laundry", "dryer"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "8525",
+    "description": "Cameras, video recording equipment",
+    "keywords": ["camera", "video", "camcorder", "dslr", "webcam"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8518",
+    "description": "Microphones, speakers, audio equipment",
+    "keywords": ["microphone", "speaker", "audio", "sound system", "headphone"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9018",
+    "description": "Medical instruments, equipment",
+    "keywords": ["medical", "instrument", "equipment", "thermometer", "stethoscope"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "9401",
+    "description": "Seats, chairs, seating furniture",
+    "keywords": ["seat", "chair", "sofa", "couch", "seating"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9404",
+    "description": "Mattresses, cushions, pillows",
+    "keywords": ["mattress", "cushion", "pillow", "bedding"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "9503",
+    "description": "Toys, games, sports equipment",
+    "keywords": ["toy", "game", "sports", "equipment", "plaything"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "9504",
+    "description": "Video games, consoles, gaming",
+    "keywords": ["video game", "console", "gaming", "playstation", "xbox"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "9608",
+    "description": "Pens, pencils, writing instruments",
+    "keywords": ["pen", "pencil", "marker", "writing", "stationery"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "9615",
+    "description": "Combs, brushes, hair accessories",
+    "keywords": ["comb", "brush", "hair", "accessory"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "6203",
+    "description": "Men's suits, jackets, trousers",
+    "keywords": ["suit", "jacket", "trouser", "pant", "blazer", "mens wear"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "6204",
+    "description": "Women's suits, dresses, skirts",
+    "keywords": ["dress", "skirt", "womens wear", "kurti", "saree blouse"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "8703",
+    "description": "Motor cars, automobiles, vehicles",
+    "keywords": ["car", "automobile", "vehicle", "sedan", "suv"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "8711",
+    "description": "Motorcycles, bikes, two-wheelers",
+    "keywords": ["motorcycle", "bike", "two wheeler", "scooter", "moped"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "8712",
+    "description": "Bicycles, non-motorized cycles",
+    "keywords": ["bicycle", "cycle", "bike", "pedal"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "4011",
+    "description": "Rubber tyres, tubes",
+    "keywords": ["tyre", "tire", "tube", "rubber", "wheel"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "2710",
+    "description": "Petroleum products, diesel, petrol",
+    "keywords": ["petrol", "diesel", "fuel", "petroleum", "gasoline"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "2711",
+    "description": "LPG, natural gas, cooking gas",
+    "keywords": ["lpg", "gas", "cooking gas", "cylinder", "natural gas"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "2523",
+    "description": "Cement, construction materials",
+    "keywords": ["cement", "concrete", "construction", "building material"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "6907",
+    "description": "Tiles, ceramic tiles, flooring",
+    "keywords": ["tile", "ceramic", "flooring", "vitrified"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "6910",
+    "description": "Sanitary ware, washbasins, toilets",
+    "keywords": ["sanitary", "washbasin", "toilet", "sink", "bathroom"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "7308",
+    "description": "Steel structures, iron frames",
+    "keywords": ["steel structure", "iron frame", "metal structure", "fabrication"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "7610",
+    "description": "Aluminum structures, doors, windows",
+    "keywords": ["aluminum", "aluminium", "door", "window", "frame"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "4407",
+    "description": "Timber, wood, lumber",
+    "keywords": ["timber", "wood", "lumber", "plywood", "wooden"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "3214",
+    "description": "Paints, coatings, putty",
+    "keywords": ["paint", "coating", "putty", "enamel", "distemper"],
+    "gst_rate": 28
+  },
+  {
+    "hsn": "3916",
+    "description": "Plastic pipes, PVC pipes",
+    "keywords": ["pipe", "pvc", "plastic pipe", "tubing"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "7219",
+    "description": "Stainless steel sheets, plates",
+    "keywords": ["stainless steel", "sheet", "plate", "ss"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8302",
+    "description": "Door handles, hinges, fittings",
+    "keywords": ["handle", "hinge", "door fitting", "door hardware"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9971",
+    "description": "Architectural services, design",
+    "keywords": ["architecture", "architectural", "design", "planning", "architect"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9954",
+    "description": "Legal services, advocacy",
+    "keywords": ["legal", "lawyer", "advocate", "attorney", "law"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9985",
+    "description": "Engineering services, technical consulting",
+    "keywords": ["engineering", "engineer", "technical", "civil", "mechanical"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9963",
+    "description": "Photography services, video production",
+    "keywords": ["photography", "photographer", "video", "videography", "shoot"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9969",
+    "description": "Event management, organizing services",
+    "keywords": ["event", "event management", "organizing", "conference", "wedding"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9967",
+    "description": "Transportation services, logistics",
+    "keywords": ["transport", "logistics", "freight", "delivery", "courier"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "9964",
+    "description": "Cleaning services, housekeeping",
+    "keywords": ["cleaning", "housekeeping", "janitorial", "maintenance"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9965",
+    "description": "Security services, guard services",
+    "keywords": ["security", "guard", "security services", "protection"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9997",
+    "description": "Training and education services",
+    "keywords": ["training", "education", "coaching", "course", "workshop"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9961",
+    "description": "Restaurant services, food services",
+    "keywords": ["restaurant", "food service", "catering", "dining"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "9963",
+    "description": "Hotel accommodation, lodging",
+    "keywords": ["hotel", "accommodation", "lodging", "room", "stay"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9992",
+    "description": "Repair and maintenance services",
+    "keywords": ["repair", "maintenance", "service", "fixing", "servicing"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8544",
+    "description": "Electrical wires, cables",
+    "keywords": ["wire", "cable", "electrical", "wiring"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "8536",
+    "description": "Electrical switches, sockets, MCB",
+    "keywords": ["switch", "socket", "mcb", "electrical", "plug"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "3923",
+    "description": "Plastic containers, storage boxes",
+    "keywords": ["container", "storage", "box", "plastic box", "organizer"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "6305",
+    "description": "Bags, shopping bags, sacks",
+    "keywords": ["bag", "shopping bag", "sack", "carry bag", "jute bag"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "4202",
+    "description": "Handbags, backpacks, luggage",
+    "keywords": ["handbag", "backpack", "luggage", "suitcase", "bag"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9102",
+    "description": "Wristwatches, watches, clocks",
+    "keywords": ["watch", "wristwatch", "clock", "timepiece"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "7113",
+    "description": "Jewelry, gold ornaments, silver",
+    "keywords": ["jewelry", "jewellery", "gold", "silver", "ornament"],
+    "gst_rate": 3
+  },
+  {
+    "hsn": "7117",
+    "description": "Imitation jewelry, fashion jewelry",
+    "keywords": ["imitation", "fashion jewelry", "artificial", "costume jewelry"],
+    "gst_rate": 3
+  },
+  {
+    "hsn": "9021",
+    "description": "Orthopaedic appliances, hearing aids",
+    "keywords": ["orthopaedic", "hearing aid", "medical appliance", "prosthetic"],
+    "gst_rate": 5
+  },
+  {
+    "hsn": "3004",
+    "description": "Ayurvedic medicines, supplements",
+    "keywords": ["ayurvedic", "supplement", "herbal", "health supplement"],
+    "gst_rate": 12
+  },
+  {
+    "hsn": "9973",
+    "description": "Cloud services, SaaS, hosting",
+    "keywords": ["cloud", "saas", "hosting", "server", "subscription"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9982",
+    "description": "Business support services, BPO",
+    "keywords": ["bpo", "business support", "outsourcing", "back office"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9973",
+    "description": "Mobile app development, software",
+    "keywords": ["app development", "mobile app", "ios", "android", "application"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "998599",
+    "description": "Data processing services",
+    "keywords": ["data processing", "data entry", "data analysis", "analytics"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "997331",
+    "description": "Website design and development",
+    "keywords": ["website", "web design", "web development", "frontend", "backend"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "998314",
+    "description": "Custom software development",
+    "keywords": ["custom software", "software development", "bespoke software", "enterprise software"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9983",
+    "description": "Financial services, mutual funds",
+    "keywords": ["financial", "mutual fund", "investment", "finance"],
+    "gst_rate": 18
+  },
+  {
+    "hsn": "9972",
+    "description": "HR consulting, recruitment services",
+    "keywords": ["hr", "recruitment", "hiring", "staffing", "human resources"],
+    "gst_rate": 18
+  }
+]

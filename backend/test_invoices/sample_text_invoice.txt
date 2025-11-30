@@ -1,0 +1,42 @@
+                        TAX INVOICE
+
+Tech Supplies Pvt Ltd
+123 MG Road, Bangalore, Karnataka - 560001
+GSTIN: 29AABCT1234A1Z5
+Phone: +91-80-12345678
+
+Invoice No: INV-2024-001
+Date: 15/12/2024
+
+Bill To:
+ABC Enterprises
+456 Park Street, Bangalore - 560002
+GSTIN: 29AABCE5678B1Z3
+
+----------------------------------------------------------------
+| Item Description          | Qty |  Rate   |   Amount        |
+----------------------------------------------------------------
+| Laptop Dell Inspiron 15   |  1  | 50,000  |   50,000.00     |
+| (Model: Inspiron 3511)    |     |         |                 |
+| HSN: 8471                 |     |         |                 |
+----------------------------------------------------------------
+
+                                    Taxable Value:   Rs 50,000.00
+                                    CGST @ 9%:       Rs  4,500.00
+                                    SGST @ 9%:       Rs  4,500.00
+                                    -----------------------------
+                                    Total Amount:    Rs 59,000.00
+                                    =============================
+
+Amount in Words: Fifty-Nine Thousand Rupees Only
+
+Bank Details:
+Bank: HDFC Bank
+Account: 1234567890
+IFSC: HDFC0001234
+
+For Tech Supplies Pvt Ltd
+
+
+_________________
+Authorized Signatory
