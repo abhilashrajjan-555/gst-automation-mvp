@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { API_URL } from '@/lib/api';
+import { supabase } from '@/lib/supabase';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function Reconciliation() {
     const [gstr2aFile, setGstr2aFile] = useState<File | null>(null);
@@ -11,6 +13,14 @@ export default function Reconciliation() {
         e.preventDefault();
         if (!gstr2aFile) return;
 
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+
+        if (!token) {
+            setReconciliationResult({ success: false, message: 'Authentication required' });
+            return;
+        }
+
         setUploading(true);
         const formData = new FormData();
         formData.append('file', gstr2aFile);
@@ -18,6 +28,7 @@ export default function Reconciliation() {
         try {
             const response = await fetch(`${API_URL}/api/reconcile-gstr2a`, {
                 method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
                 body: formData,
             });
             const data = await response.json();

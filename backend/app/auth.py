@@ -11,6 +11,9 @@ from typing import Optional
 # Get Supabase JWT secret from environment
 SUPABASE_JWT_SECRET = os.getenv('SUPABASE_JWT_SECRET', '')
 
+if not SUPABASE_JWT_SECRET:
+    print("WARNING: SUPABASE_JWT_SECRET is not set. Authentication will fail.")
+
 def verify_token(authorization: Optional[str] = Header(None)) -> dict:
     """
     Verify JWT token from Authorization header
@@ -28,11 +31,14 @@ def verify_token(authorization: Optional[str] = Header(None)) -> dict:
         raise HTTPException(status_code=401, detail="No authorization header")
     
     try:
+        if not SUPABASE_JWT_SECRET:
+            raise HTTPException(status_code=500, detail="Server authentication not configured")
+
         # Extract token from "Bearer <token>"
         scheme, token = authorization.split()
         if scheme.lower() != 'bearer':
             raise HTTPException(status_code=401, detail="Invalid authentication scheme")
-        
+
         # Decode and verify token
         payload = jwt.decode(
             token,

@@ -84,9 +84,8 @@ class GSTR3BGenerator:
         table_3_2 = self._calculate_table_3_2(sales_invoices)
         table_4 = self._calculate_table_4(purchase_invoices)
         table_5 = self._calculate_table_5(sales_invoices, purchase_invoices)
-        table_6 = self._calculate_table_6(table_5)
 
-        # Build GSTR-3B structure
+        # Build GSTR-3B structure (table_6 calculated after)
         gstr3b = {
             'gstin': self.gstin,
             'ret_period': f"{month:02d}{year}",
@@ -105,17 +104,22 @@ class GSTR3BGenerator:
             # Table 5: Values of exempt, nil-rated and non-GST
             'table_5': table_5,
 
-            # Table 6: Payment of tax
-            'table_6': table_6,
+            # Table 6: Payment of tax (placeholder, calculated below)
+            'table_6': {},
 
             # Summary
             'summary': {
                 'total_sales': table_3_1['total_taxable_value'],
                 'total_tax_on_sales': table_3_1['total_tax'],
                 'total_purchases': table_4['total_itc'],
-                'net_tax_liability': table_6['total_tax_payable']
+                'net_tax_liability': 0
             }
         }
+
+        # Calculate actual net tax for table 6
+        net_tax = self.calculate_net_tax(gstr3b)
+        gstr3b['table_6'] = net_tax
+        gstr3b['summary']['net_tax_liability'] = net_tax['total_tax_payable']
 
         return gstr3b
 
@@ -254,25 +258,6 @@ class GSTR3BGenerator:
             'exempt_supplies': round(exempt_sales, 2),
             'nil_rated_supplies': round(nil_rated_sales, 2),
             'non_gst_supplies': round(non_gst_sales, 2)
-        }
-
-    def _calculate_table_6(self, table_5_data: Dict) -> Dict:
-        """
-        Calculate Table 6: Payment of tax
-
-        Net tax liability = Output tax - ITC
-        """
-        # This will be calculated from table 3.1 and table 4
-        # For now, returning placeholder structure
-
-        return {
-            'igst_payable': 0,
-            'cgst_payable': 0,
-            'sgst_payable': 0,
-            'cess_payable': 0,
-            'total_tax_payable': 0,
-            'interest': 0,
-            'late_fee': 0
         }
 
     def calculate_net_tax(self, gstr3b_data: Dict) -> Dict:

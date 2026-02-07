@@ -1,5 +1,8 @@
 'use client';
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function GSTR3BGenerator() {
   const [gstin, setGstin] = useState('29AABCT1234A1Z5');
@@ -12,6 +15,15 @@ export default function GSTR3BGenerator() {
     e.preventDefault();
     setGenerating(true);
 
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+
+    if (!token) {
+      setResult({ success: false, error: 'Authentication required' });
+      setGenerating(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append('gstin', gstin);
     formData.append('month', month);
@@ -20,6 +32,7 @@ export default function GSTR3BGenerator() {
     try {
       const res = await fetch(`${API_URL}/api/generate-gstr3b`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
       });
       const data = await res.json();
@@ -104,11 +117,10 @@ export default function GSTR3BGenerator() {
                     <span className="font-medium text-indigo-600">₹{result.data?.summary?.net_tax_liability?.toLocaleString('en-IN') || 0}</span>
                   </div>
                 </div>
-                <p className="mt-4 text-xs text-gray-600">File saved: {result.file_path}</p>
               </div>
             ) : (
               <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-                <p className="text-red-800 font-medium">Error: {result.error}</p>
+                <p className="text-red-800 font-medium">Error: {result.error || result.detail}</p>
               </div>
             )}
           </div>

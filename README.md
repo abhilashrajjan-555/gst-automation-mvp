@@ -2,285 +2,143 @@
 
 **Automate GST compliance for Indian SMBs. Save 75% time on monthly filing.**
 
-[![Status](https://img.shields.io/badge/status-MVP%20Complete-success)]()
-[![Python](https://img.shields.io/badge/python-3.14-blue)]()
-[![Next.js](https://img.shields.io/badge/next.js-16-black)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
+> Built entirely using AI coding assistants (Claude + ChatGPT) by a non-developer.
 
 ---
 
-## 🎯 What This Does
+## The Problem
 
-This application automates the **most painful part of running a business in India**: GST compliance.
+Manual GST filing takes **4-6 hours/month**. Invoice matching errors lead to GST notices. CAs charge ₹2K-5K/month for basic filing. Late filing = ₹200/day penalty + 18% interest.
 
-### The Problem
-- Manual GST filing takes **4-6 hours/month**
-- Invoice matching errors lead to **GST notices**
-- CAs charge **₹2,000-5,000/month** for basic filing
-- Tally/Zoho are **complex and expensive** (₹18K-54K/year)
-- Late filing = **₹200/day penalty + 18% interest**
+## The Solution
 
-### The Solution
-Upload invoices → Auto-categorize → Generate GSTR-3B → File in 30 minutes.
+Upload invoices → Auto-categorize with OCR → Generate GSTR-3B → File in 30 minutes.
 
-**Time Saved:** 75% (4-6 hrs → 1 hr/month)  
-**Cost Saved:** ₹14K-50K/year  
-**Error Rate:** <5% (vs 10-15% manual)
+**Time Saved:** 75% (4-6 hrs → 1 hr/month)
+**Cost Saved:** ₹14K-50K/year
 
 ---
 
-## ✨ Features
+## Features
 
-### Current (MVP)
-✅ **Invoice Upload**: PDF, JPG, PNG via web interface  
-✅ **OCR Extraction**: Automatic data extraction (GSTIN, amounts, dates)  
-✅ **HSN Matching**: 97 HSN codes with fuzzy matching (75-100% confidence)  
-✅ **GSTR-3B Generation**: Complete monthly return JSON (ready for portal upload)  
-✅ **Dashboard**: Real-time stats (invoices, amounts, tax)  
-✅ **Invoice History**: Searchable table of all processed invoices  
-
-### Coming Soon (Production)
-🔜 **User Authentication**: Multi-user support  
-🔜 **WhatsApp Upload**: Send invoices via WhatsApp  
-🔜 **Invoice Reconciliation**: Match GSTR-2A with your books  
-🔜 **E-Invoice Generation**: IRN + QR code for B2B sales  
-🔜 **AI Notice Analyzer**: Explain GST notices in simple language  
-🔜 **Payment Integration**: Razorpay for subscriptions  
+- **Invoice Upload** — PDF, JPG, PNG, Word, Excel via web interface
+- **OCR Extraction** — Automatic data extraction (GSTIN, amounts, dates)
+- **HSN Matching** — 97 HSN codes with fuzzy matching (75-100% confidence)
+- **GSTR-3B Generation** — Complete monthly return JSON, ready for portal upload
+- **Dashboard** — Real-time stats (invoices, amounts, tax)
+- **Multi-user Auth** — Supabase authentication with JWT
+- **Invoice Reconciliation** — GSTR-2A reconciliation (demo mode)
+- **Excel Export** — Download invoice data as Excel
 
 ---
 
-## 🚀 Quick Start
+## Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Frontend | Next.js + TypeScript + Tailwind CSS |
+| Backend | Python + FastAPI |
+| Auth | Supabase (JWT) |
+| OCR | Tesseract |
+| Storage | JSON files (MVP), Supabase PostgreSQL (production) |
+
+---
+
+## Quick Start
 
 ### Prerequisites
+
 ```bash
 # macOS
-brew install tesseract
+brew install tesseract poppler
 
 # Ubuntu/Debian
-sudo apt-get install tesseract-ocr
-
-# Python 3.8+
-python3 --version
+sudo apt-get install tesseract-ocr poppler-utils
 ```
 
-### Installation
+### Setup
+
 ```bash
-# Clone repository
-git clone <repo-url>
+git clone https://github.com/abhilashrajjan-555/gst-automation-mvp.git
 cd gst-automation-mvp
 
-# Backend setup
+# Backend
 cd backend
 pip3 install -r requirements.txt
+cp .env.example .env  # Add your Supabase credentials
 
-# Frontend setup
+# Frontend
 cd ../frontend
 npm install
 ```
 
-### Run Application
+### Run
+
 ```bash
-# Terminal 1: Start backend
+# Terminal 1: Backend
 cd backend
 python3 -m uvicorn api:app --reload --port 8000
 
-# Terminal 2: Start frontend
+# Terminal 2: Frontend
 cd frontend
 npm run dev
 ```
 
-### Access
 - **App**: http://localhost:3000
 - **API Docs**: http://localhost:8000/docs
 
 ---
 
-## 📖 Usage
+## Environment Variables
 
-### 1. Upload Invoice
-1. Click **"Upload Invoice"** tab
-2. Select file (PDF/JPG/PNG)
-3. Choose type (Purchase/Sales)
-4. Click **"Upload & Process"**
-
-### 2. View Dashboard
-- See total invoices processed
-- View total amounts and tax
-- Track processing confidence
-
-### 3. Generate GSTR-3B
-1. Click **"GSTR-3B"** tab
-2. Enter GSTIN, month, year
-3. Click **"Generate GSTR-3B"**
-4. Download JSON for GST portal
-
-### 4. Review Invoices
-- Click **"Invoice List"** tab
-- View all processed invoices
-- Check HSN codes and amounts
-
----
-
-## 🏗️ Architecture
-
+### Backend (`backend/.env`)
 ```
-┌─────────────┐
-│   Browser   │
-│ (Next.js)   │
-└──────┬──────┘
-       │ HTTP
-       ▼
-┌─────────────┐
-│  FastAPI    │
-│  Backend    │
-└──────┬──────┘
-       │
-   ┌───┴────┬──────────┬──────────┐
-   ▼        ▼          ▼          ▼
-┌─────┐ ┌──────┐ ┌─────────┐ ┌──────┐
-│ OCR │ │ HSN  │ │ GSTR-3B │ │ JSON │
-│     │ │Match │ │  Gen    │ │  DB  │
-└─────┘ └──────┘ └─────────┘ └──────┘
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-anon-key
+SUPABASE_JWT_SECRET=your-jwt-secret
+USER_GSTIN=your-15-char-gstin  # For state code detection
 ```
 
-### Tech Stack
-- **Backend**: Python 3.14 + FastAPI
-- **Frontend**: Next.js 16 + TypeScript + Tailwind CSS
-- **OCR**: Tesseract 5.5.1
-- **Storage**: JSON files (MVP) → PostgreSQL (Production)
-
----
-
-## 📁 Project Structure
-
+### Frontend (`.env.local`)
 ```
-gst-automation-mvp/
-├── backend/              # Python FastAPI backend
-│   ├── app/             # Core processing modules
-│   ├── api.py           # REST API endpoints
-│   ├── data/            # HSN database + invoices
-│   └── requirements.txt
-├── frontend/            # Next.js frontend
-│   ├── app/            # Pages
-│   ├── components/     # React components
-│   └── package.json
-├── directives/         # Business logic documentation
-├── docs/              # Documentation
-├── scripts/           # Utility scripts
-└── README.md
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
 ---
 
-## 🧪 Testing
+## Architecture
 
-### Run System Tests
-```bash
-cd backend
-python3 test_system.py
 ```
-
-### Test with Sample Invoice
-```bash
-# Generate sample invoice
-python3 scripts/generate_sample_invoice.py
-
-# Process it
-python3 -m app.processor process backend/test_invoices/sample_invoice_generated.png --type purchase
-```
-
-### Expected Output
-```
-✓ OCR completed (confidence: 90%)
-  Vendor GSTIN: 29AABCT1234A1Z5
-  Invoice #: INV-2024-001
-  Total: ₹59,000.00
-
-✓ Invoice saved: e985eda0-26c8-4902-8a53-2c197fc451cd.json
+Browser (Next.js + TypeScript)
+    │
+    ▼  HTTP + JWT Auth
+FastAPI Backend
+    │
+    ├── OCR (Tesseract) → Extract invoice data
+    ├── HSN Matcher (fuzzy) → Classify items
+    ├── GSTR-3B Generator → Monthly returns
+    └── Supabase → Auth + Database
 ```
 
 ---
 
-## 📊 Performance
+## Known Limitations (MVP)
 
-| Metric | Target | Actual |
-|--------|--------|--------|
-| OCR Accuracy | 70-90% | 90% |
-| HSN Match Confidence | 85-95% | 75-100% |
-| Processing Time | <30s | <10s |
-| Error Rate | <5% | <5% |
-
----
-
-## 🗺️ Roadmap
-
-### Phase 1: MVP (✅ Complete)
-- [x] Invoice upload
-- [x] OCR extraction
-- [x] HSN matching
-- [x] GSTR-3B generation
-- [x] Dashboard
-
-### Phase 2: Production (In Progress)
-- [ ] User authentication
-- [ ] PostgreSQL database
-- [ ] AWS deployment
-- [ ] Payment integration
-
-### Phase 3: Scale (Planned)
-- [ ] WhatsApp integration
-- [ ] Invoice reconciliation
-- [ ] E-invoice generation
-- [ ] AI notice analyzer
+- Line item extraction from OCR is basic (uses total amount as single item)
+- GSTR-2A reconciliation is in demo mode
+- State code for IGST/CGST split defaults to Kerala if USER_GSTIN not set
+- No WhatsApp upload yet
+- No e-invoice generation yet
 
 ---
 
-## 💰 Pricing (Planned)
+## License
 
-| Tier | Price/Year | Features |
-|------|-----------|----------|
-| **Basic** | ₹4,999 | 5 invoices/month, GSTR-3B |
-| **Pro** | ₹9,999 | 50 invoices/month, GSTR-1, WhatsApp upload |
-| **Premium** | ₹19,999 | Unlimited, E-invoice, Priority support |
-
-**Compare:** CAs charge ₹24K-60K/year for the same service.
+MIT
 
 ---
 
-## 🤝 Contributing
-
-This is a commercial project. Contributions are welcome for:
-- Bug fixes
-- Documentation improvements
-- HSN code additions
-- Test cases
-
----
-
-## 📄 License
-
-MIT License - See LICENSE file for details.
-
----
-
-## 📞 Support
-
-- **Documentation**: See `/docs` folder
-- **Issues**: Check `PROJECT_STATUS.md`
-- **Email**: [Your email]
-
----
-
-## 🙏 Acknowledgments
-
-Built with:
-- Python + FastAPI
-- Next.js + React
-- Tesseract OCR
-- Claude AI (development assistance)
-
+Built with Python, Next.js, Tesseract OCR, and AI coding assistants.
 Inspired by the pain of 11M+ Indian SMBs struggling with GST compliance.
-
----
-
-**Made with ❤️ for Indian businesses**

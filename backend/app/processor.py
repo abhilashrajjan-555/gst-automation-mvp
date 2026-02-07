@@ -13,6 +13,7 @@ This is the main entry point for the MVP.
 """
 
 import json
+import os
 import uuid
 from pathlib import Path
 from datetime import datetime
@@ -161,8 +162,10 @@ class InvoiceProcessor:
         sgst_amount = ocr_result['sgst']
         igst_amount = ocr_result['igst']
         
-        # User's State Code (Hardcoded for MVP, should come from User Profile)
-        USER_STATE_CODE = "32" # Kerala
+        # User's State Code (from GSTIN or defaults to Kerala)
+        # In production, this should come from the user's profile/GSTIN
+        user_gstin = os.environ.get('USER_GSTIN', '')
+        USER_STATE_CODE = user_gstin[:2] if len(user_gstin) >= 2 else "32"
         
         # Extract Vendor State Code
         vendor_gstin = ocr_result['vendor_gstin']
@@ -249,8 +252,7 @@ class InvoiceProcessor:
         if cleaned:
             return cleaned
         else:
-            # Fallback: ask user
-            return input("  Enter item description: ").strip()
+            return "General goods and services"
 
     def _confirm_hsn(self, item_description: str, hsn_result: Dict, auto_confirm: bool = False) -> bool:
         """

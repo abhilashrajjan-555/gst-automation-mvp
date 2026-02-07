@@ -10,8 +10,21 @@ import type {
   GSTR3BResponse,
   InvoiceType,
 } from '@/types/invoice';
+import { supabase } from '@/lib/supabase';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+/**
+ * Get auth headers from current Supabase session
+ */
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) {
+    throw new Error('Authentication required. Please sign in.');
+  }
+  return { 'Authorization': `Bearer ${token}` };
+}
 
 /**
  * Helper function to handle API responses
@@ -29,19 +42,19 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 /**
  * Upload and process an invoice
- * @param file - Invoice file (PDF/JPG/PNG)
- * @param invoiceType - 'sales' or 'purchase'
  */
 export async function uploadInvoice(
   file: File,
   invoiceType: InvoiceType
 ): Promise<UploadResponse> {
+  const headers = await getAuthHeaders();
   const formData = new FormData();
   formData.append('file', file);
   formData.append('invoice_type', invoiceType);
 
   const response = await fetch(`${API_BASE_URL}/api/upload-invoice`, {
     method: 'POST',
+    headers,
     body: formData,
   });
 
@@ -49,32 +62,32 @@ export async function uploadInvoice(
 }
 
 /**
- * Fetch all processed invoices
+ * Fetch all processed invoices for the authenticated user
  */
 export async function fetchInvoices(): Promise<InvoicesResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/invoices`);
+  const headers = await getAuthHeaders();
+  const response = await fetch(`${API_BASE_URL}/api/invoices`, { headers });
   return handleResponse<InvoicesResponse>(response);
 }
 
 /**
- * Fetch dashboard statistics
+ * Fetch dashboard statistics for the authenticated user
  */
 export async function fetchStats(): Promise<StatsResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/stats`);
+  const headers = await getAuthHeaders();
+  const response = await fetch(`${API_BASE_URL}/api/stats`, { headers });
   return handleResponse<StatsResponse>(response);
 }
 
 /**
  * Generate GSTR-3B monthly return
- * @param gstin - GSTIN (15 characters)
- * @param month - Month (1-12)
- * @param year - Year (YYYY)
  */
 export async function generateGSTR3B(
   gstin: string,
   month: number,
   year: number
 ): Promise<GSTR3BResponse> {
+  const headers = await getAuthHeaders();
   const formData = new FormData();
   formData.append('gstin', gstin);
   formData.append('month', month.toString());
@@ -82,6 +95,7 @@ export async function generateGSTR3B(
 
   const response = await fetch(`${API_BASE_URL}/api/generate-gstr3b`, {
     method: 'POST',
+    headers,
     body: formData,
   });
 
@@ -89,7 +103,7 @@ export async function generateGSTR3B(
 }
 
 /**
- * Health check endpoint
+ * Health check endpoint (no auth needed)
  */
 export async function checkHealth(): Promise<{ status: string }> {
   const response = await fetch(`${API_BASE_URL}/api/health`);

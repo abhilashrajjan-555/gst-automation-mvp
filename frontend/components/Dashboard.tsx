@@ -1,25 +1,27 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { API_URL } from '@/lib/api';
+import { fetchStats } from '@/lib/api-client';
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/stats`)
-      .then(res => res.json())
+    fetchStats()
       .then(data => {
-        setStats(data);
+        setStats(data.stats);
         setLoading(false);
       })
       .catch(err => {
         console.error(err);
+        setError(err.message);
         setLoading(false);
       });
   }, []);
 
   if (loading) return <div className="text-center py-12">Loading...</div>;
+  if (error) return <div className="text-center py-12 text-red-600">Error: {error}</div>;
 
   return (
     <div className="space-y-6">

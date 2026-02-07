@@ -9,7 +9,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { API_URL } from '@/lib/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 import InvoiceUpload from '@/components/InvoiceUpload';
 import Dashboard from '@/components/Dashboard';
 import InvoiceList from '@/components/InvoiceList';

@@ -23,6 +23,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 from app.processor import InvoiceProcessor
 from app.hsn_matcher import HSNMatcher
 from app.auth import get_user_id
+from app.db import db
 
 # Initialize FastAPI
 app = FastAPI(
@@ -97,13 +98,14 @@ async def upload_bulk_invoices(
     print(f"Bulk Processing: {len(files)} files for user {user_id}")
     print(f"{'='*60}\n")
 
-    # 1. Save all files first
+    # 1. Save all files first (sanitize filenames)
     saved_files = []
     for file in files:
-        file_path = processor.uploads_dir / file.filename
+        safe_filename = Path(file.filename).name
+        file_path = processor.uploads_dir / safe_filename
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        saved_files.append((file.filename, str(file_path)))
+        saved_files.append((safe_filename, str(file_path)))
 
     # 2. Define async processing wrapper
     async def process_single(filename, path):
@@ -190,8 +192,9 @@ async def upload_invoice(
                 f"Invalid file type. Allowed: {', '.join(allowed_extensions)}"
             )
 
-        # Save uploaded file
-        upload_path = UPLOADS_DIR / file.filename
+        # Save uploaded file (sanitize filename to prevent path traversal)
+        safe_filename = Path(file.filename).name
+        upload_path = UPLOADS_DIR / safe_filename
         with open(upload_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
@@ -245,8 +248,6 @@ async def list_invoices(user_id: str = Depends(get_user_id)):
                             invoices.append(invoice_data)
                 except Exception as e:
                     print(f"Error reading {invoice_file}: {e}")
-                except Exception as e:
-                    print(f"Error reading {invoice_file}: {e}")
 
         # Sort by date (newest first)
         invoices.sort(
@@ -265,17 +266,18 @@ async def list_invoices(user_id: str = Depends(get_user_id)):
 
 
 @app.get("/api/invoices/export/excel")
-async def export_invoices_excel():
-    """Export all invoices to Excel file"""
+async def export_invoices_excel(user_id: str = Depends(get_user_id)):
+    """Export invoices for the authenticated user to Excel file"""
     try:
         invoices = []
-        
+
         if INVOICES_DIR.exists():
             for invoice_file in INVOICES_DIR.glob("*.json"):
                 try:
                     with open(invoice_file, 'r') as f:
                         invoice_data = json.load(f)
-                        invoices.append(invoice_data)
+                        if invoice_data.get('user_id') == user_id:
+                            invoices.append(invoice_data)
                 except Exception as e:
                     print(f"Error reading {invoice_file}: {e}")
         
@@ -394,7 +396,7 @@ async def suggest_hsn(item_description: str = Form(...)):
 
 
 @app.patch("/api/invoice/{invoice_id}")
-async def update_invoice(invoice_id: str, update_data: Dict = Body(...)):
+async def update_invoice(invoice_id: str, update_data: Dict = Body(...), user_id: str = Depends(get_user_id)):
     """
     Update invoice fields (e.g. reconciliation_status)
     """
@@ -435,7 +437,8 @@ async def update_invoice(invoice_id: str, update_data: Dict = Body(...)):
 async def generate_gstr3b(
     gstin: str = Form(...),
     month: int = Form(...),
-    year: int = Form(...)
+    year: int = Form(...),
+    user_id: str = Depends(get_user_id)
 ):
     """
     Generate GSTR-3B monthly return
@@ -479,17 +482,18 @@ async def generate_gstr3b(
 
 
 @app.get("/api/stats")
-async def get_stats():
-    """Get dashboard statistics"""
+async def get_stats(user_id: str = Depends(get_user_id)):
+    """Get dashboard statistics for the authenticated user"""
     try:
         invoices = []
 
         if INVOICES_DIR.exists():
             for invoice_file in INVOICES_DIR.glob("*.json"):
                 try:
-                    with open(invoice_file, 'r') as f:
-                        invoices.append(json.load(f))
-                except:
+                    data = json.load(open(invoice_file, 'r'))
+                    if data.get('user_id') == user_id:
+                        invoices.append(data)
+                except Exception:
                     pass
 
         # Calculate stats
@@ -525,7 +529,7 @@ async def get_stats():
 
 
 @app.post("/api/reconcile-gstr2a")
-async def reconcile_gstr2a(file: UploadFile = File(...)):
+async def reconcile_gstr2a(file: UploadFile = File(...), user_id: str = Depends(get_user_id)):
     """
     Reconcile uploaded invoices with GSTR-2A data
     
@@ -533,60 +537,40 @@ async def reconcile_gstr2a(file: UploadFile = File(...)):
     In production, this would parse the actual GSTR-2A Excel/JSON file.
     """
     try:
-        # Load our invoices
+        # Load invoices for this user
         our_invoices = []
         if INVOICES_DIR.exists():
             for invoice_file in INVOICES_DIR.glob("*.json"):
                 try:
                     with open(invoice_file, 'r') as f:
                         invoice_data = json.load(f)
-                        if invoice_data.get('invoice_type') == 'purchase':
+                        if (invoice_data.get('user_id') == user_id and
+                                invoice_data.get('invoice_type') == 'purchase'):
                             our_invoices.append(invoice_data)
                 except Exception as e:
                     print(f"Error reading {invoice_file}: {e}")
         
-        # Placeholder: In real implementation, parse GSTR-2A file here
-        # For now, we'll simulate reconciliation
-        
-        matched = 0
-        missing_in_portal = 0
-        amount_mismatch = 0
+        # MVP: Show invoices that would need reconciliation
+        # Real implementation would parse the GSTR-2A Excel/JSON file
         details = []
-        
         for inv in our_invoices:
-            # Simulate random reconciliation status
-            import random
-            status_choice = random.choice(['matched', 'matched', 'missing', 'mismatch'])
-            
-            if status_choice == 'matched':
-                matched += 1
-                status = 'matched'
-                portal_amount = inv.get('total_amount')
-            elif status_choice == 'missing':
-                missing_in_portal += 1
-                status = 'missing_in_portal'
-                portal_amount = None
-            else:
-                amount_mismatch += 1
-                status = 'amount_mismatch'
-                portal_amount = inv.get('total_amount', 0) * 0.95  # Simulate 5% difference
-            
             details.append({
                 'invoice_number': inv.get('invoice_number'),
                 'vendor_gstin': inv.get('vendor_gstin'),
                 'your_amount': inv.get('total_amount'),
-                'portal_amount': portal_amount,
-                'status': status
+                'portal_amount': None,
+                'status': 'pending_reconciliation'
             })
-        
+
         return {
             'success': True,
-            'matched': matched,
-            'missing_in_portal': missing_in_portal,
-            'amount_mismatch': amount_mismatch,
+            'is_demo': True,
+            'matched': 0,
+            'missing_in_portal': 0,
+            'amount_mismatch': 0,
             'total_invoices': len(our_invoices),
             'details': details,
-            'message': 'Note: This is a demo reconciliation. In production, this will parse your actual GSTR-2A file.'
+            'message': 'DEMO MODE: GSTR-2A file parsing is not yet implemented. Showing your purchase invoices that would be reconciled.'
         }
     
     except Exception as e:
