@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { API_URL } from '@/lib/api';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function InvoiceUpload() {
   const [files, setFiles] = useState<FileList | null>(null);
