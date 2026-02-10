@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import List, Optional, Dict
 import json
 import shutil
+import uuid
 from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
@@ -53,10 +54,32 @@ hsn_matcher = HSNMatcher()
 DATA_DIR = Path(__file__).parent / "data"
 INVOICES_DIR = DATA_DIR / "invoices"
 UPLOADS_DIR = Path(__file__).parent / "uploads"
+ALLOWED_EXTENSIONS = {'.pdf', '.jpg', '.jpeg', '.png', '.docx', '.doc', '.xlsx', '.xls'}
 
 # Ensure directories exist
 INVOICES_DIR.mkdir(parents=True, exist_ok=True)
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def validate_file_extension(filename: str) -> None:
+    """Validate uploaded invoice file extension."""
+    if not filename:
+        raise HTTPException(400, "No filename provided")
+
+    file_ext = Path(filename).suffix.lower()
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            400,
+            f"Invalid file type. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+
+
+def build_unique_upload_path(filename: str) -> Path:
+    """Build unique upload path to avoid collisions between files with same names."""
+    safe_filename = Path(filename).name
+    file_ext = Path(safe_filename).suffix.lower()
+    unique_name = f"{uuid.uuid4().hex}{file_ext}"
+    return UPLOADS_DIR / unique_name
 
 
 @app.get("/")
@@ -101,11 +124,11 @@ async def upload_bulk_invoices(
     # 1. Save all files first (sanitize filenames)
     saved_files = []
     for file in files:
-        safe_filename = Path(file.filename).name
-        file_path = processor.uploads_dir / safe_filename
+        validate_file_extension(file.filename)
+        file_path = build_unique_upload_path(file.filename)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        saved_files.append((safe_filename, str(file_path)))
+        saved_files.append((Path(file.filename).name, str(file_path)))
 
     # 2. Define async processing wrapper
     async def process_single(filename, path):
@@ -180,21 +203,10 @@ async def upload_invoice(
     """
     try:
         # Validate file type
-        if not file.filename:
-            raise HTTPException(400, "No filename provided")
-
-        allowed_extensions = {'.pdf', '.jpg', '.jpeg', '.png', '.docx', '.doc', '.xlsx', '.xls'}
-        file_ext = Path(file.filename).suffix.lower()
-
-        if file_ext not in allowed_extensions:
-            raise HTTPException(
-                400,
-                f"Invalid file type. Allowed: {', '.join(allowed_extensions)}"
-            )
+        validate_file_extension(file.filename)
 
         # Save uploaded file (sanitize filename to prevent path traversal)
-        safe_filename = Path(file.filename).name
-        upload_path = UPLOADS_DIR / safe_filename
+        upload_path = build_unique_upload_path(file.filename)
         with open(upload_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
@@ -331,7 +343,7 @@ async def export_invoices_excel(user_id: str = Depends(get_user_id)):
             ws.column_dimensions[column].width = adjusted_width
         
         # Save to file
-        export_path = Path("data/invoices_export.xlsx")
+        export_path = DATA_DIR / "invoices_export.xlsx"
         wb.save(export_path)
         
         return FileResponse(
@@ -409,11 +421,51 @@ async def update_invoice(invoice_id: str, update_data: Dict = Body(...), user_id
         with open(invoice_path, "r") as f:
             invoice = json.load(f)
 
+        # Verify ownership before allowing updates
+        if invoice.get('user_id') != user_id:
+            raise HTTPException(403, "Access denied")
+
         # Update allowed fields
-        allowed_fields = ['reconciliation_status', 'invoice_number', 'vendor_gstin']
+        allowed_fields = [
+            'reconciliation_status',
+            'invoice_number',
+            'vendor_gstin',
+            'invoice_date',
+            'total_amount',
+            'gst_rate'
+        ]
         for key, value in update_data.items():
             if key in allowed_fields:
                 invoice[key] = value
+
+        # Keep tax fields in sync when amount/rate is edited.
+        if 'total_amount' in update_data or 'gst_rate' in update_data:
+            total_amount = float(invoice.get('total_amount') or 0)
+            gst_rate = float(invoice.get('gst_rate') or 0)
+            if total_amount > 0 and gst_rate > 0:
+                total_tax = total_amount * (gst_rate / (100 + gst_rate))
+
+                user_gstin = os.environ.get('USER_GSTIN', '')
+                user_state_code = user_gstin[:2] if len(user_gstin) >= 2 else "32"
+
+                vendor_gstin = invoice.get('vendor_gstin')
+                vendor_state_code = vendor_gstin[:2] if vendor_gstin and len(vendor_gstin) >= 2 else None
+
+                if vendor_state_code and vendor_state_code != user_state_code:
+                    igst = round(total_tax, 2)
+                    cgst = 0
+                    sgst = 0
+                else:
+                    cgst = round(total_tax / 2, 2)
+                    sgst = round(total_tax - cgst, 2)
+                    igst = 0
+
+                invoice['cgst'] = cgst
+                invoice['sgst'] = sgst
+                invoice['igst'] = igst
+                invoice['cgst_amount'] = cgst
+                invoice['sgst_amount'] = sgst
+                invoice['igst_amount'] = igst
 
         # Save back
         with open(invoice_path, "w") as f:
@@ -490,7 +542,8 @@ async def get_stats(user_id: str = Depends(get_user_id)):
         if INVOICES_DIR.exists():
             for invoice_file in INVOICES_DIR.glob("*.json"):
                 try:
-                    data = json.load(open(invoice_file, 'r'))
+                    with open(invoice_file, 'r') as f:
+                        data = json.load(f)
                     if data.get('user_id') == user_id:
                         invoices.append(data)
                 except Exception:
@@ -518,7 +571,10 @@ async def get_stats(user_id: str = Depends(get_user_id)):
                 "total_amount": round(total_amount, 2),
                 "total_tax": round(total_tax, 2),
                 "avg_processing_confidence": round(
-                    sum(inv.get('confidence', 0) for inv in invoices) / max(total_invoices, 1),
+                    sum(
+                        inv.get('ocr_confidence', inv.get('confidence', 0))
+                        for inv in invoices
+                    ) / max(total_invoices, 1),
                     1
                 )
             }
