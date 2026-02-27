@@ -1,62 +1,62 @@
 # GST Automation MVP
 
-**Automate GST compliance for Indian SMBs. Save 75% time on monthly filing.**
+Full-stack GST workflow automation prototype for Indian SMB operations.
+Upload invoices, extract structured data with OCR, and generate GSTR-3B outputs.
 
-> Built entirely using AI coding assistants (Claude + ChatGPT) by a non-developer.
+## Overview
 
----
+This project demonstrates an end-to-end GST processing flow with a Next.js frontend and FastAPI backend.
 
-## The Problem
+- Upload single or bulk invoices from the web app
+- Extract invoice fields using OCR
+- Categorize data and generate GSTR-3B JSON outputs
+- Review dashboard metrics and export processed data
+- Support authenticated usage with Supabase
 
-Manual GST filing takes **4-6 hours/month**. Invoice matching errors lead to GST notices. CAs charge ₹2K-5K/month for basic filing. Late filing = ₹200/day penalty + 18% interest.
+## Key Features
 
-## The Solution
-
-Upload invoices → Auto-categorize with OCR → Generate GSTR-3B → File in 30 minutes.
-
-**Time Saved:** 75% (4-6 hrs → 1 hr/month)
-**Cost Saved:** ₹14K-50K/year
-
----
-
-## Features
-
-- **Invoice Upload** — PDF, JPG, PNG, Word, Excel via web interface
-- **OCR Extraction** — Automatic data extraction (GSTIN, amounts, dates)
-- **HSN Matching** — 97 HSN codes with fuzzy matching (75-100% confidence)
-- **GSTR-3B Generation** — Complete monthly return JSON, ready for portal upload
-- **Dashboard** — Real-time stats (invoices, amounts, tax)
-- **Multi-user Auth** — Supabase authentication with JWT
-- **Invoice Reconciliation** — GSTR-2A reconciliation (demo mode)
-- **Excel Export** — Download invoice data as Excel
-
----
+- Invoice upload (`/api/upload-invoice`, `/api/upload-bulk`)
+- OCR-driven extraction for GSTIN, invoice metadata, and totals
+- HSN matching and tax classification support
+- GSTR-3B generation endpoint (`/api/generate-gstr3b`)
+- Invoice listing, updates, and Excel export
+- GSTR-2A reconciliation endpoint in demo mode
 
 ## Tech Stack
 
-| Layer | Tech |
-|-------|------|
-| Frontend | Next.js + TypeScript + Tailwind CSS |
-| Backend | Python + FastAPI |
-| Auth | Supabase (JWT) |
-| OCR | Tesseract |
-| Storage | JSON files (MVP), Supabase PostgreSQL (production) |
+| Layer | Technologies |
+|---|---|
+| Frontend | Next.js 16, TypeScript, Tailwind CSS |
+| Backend | Python, FastAPI, Uvicorn |
+| OCR | Tesseract + pytesseract + pdf2image |
+| Auth/Data | Supabase (Auth + DB integration) |
+| Data Files | JSON and Excel exports for MVP workflows |
 
----
+## Repository Structure
 
-## Quick Start
+```text
+gst-automation-mvp/
+├── frontend/            # Next.js UI
+├── backend/             # FastAPI API + processing pipeline
+├── backend/app/         # OCR, processor, HSN matcher, auth, DB helpers
+├── backend/data/        # Generated reports and exports
+├── backend/test_system.py
+└── docker-compose.yml
+```
 
-### Prerequisites
+## Local Setup
+
+### 1. System dependencies
 
 ```bash
 # macOS
 brew install tesseract poppler
 
-# Ubuntu/Debian
+# Ubuntu / Debian
 sudo apt-get install tesseract-ocr poppler-utils
 ```
 
-### Setup
+### 2. Clone and install
 
 ```bash
 git clone https://github.com/abhilashrajjan-555/gst-automation-mvp.git
@@ -65,80 +65,68 @@ cd gst-automation-mvp
 # Backend
 cd backend
 pip3 install -r requirements.txt
-cp .env.example .env  # Add your Supabase credentials
+cp .env.example .env
 
 # Frontend
 cd ../frontend
 npm install
 ```
 
-### Run
+### 3. Configure environment
 
-```bash
-# Terminal 1: Backend
-cd backend
-python3 -m uvicorn api:app --reload --port 8000
+Backend (`backend/.env`):
 
-# Terminal 2: Frontend
-cd frontend
-npm run dev
-```
-
-- **App**: http://localhost:3000
-- **API Docs**: http://localhost:8000/docs
-
----
-
-## Environment Variables
-
-### Backend (`backend/.env`)
-```
+```env
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_KEY=your-anon-key
+SUPABASE_KEY=your-anon-or-service-key
 SUPABASE_JWT_SECRET=your-jwt-secret
-USER_GSTIN=your-15-char-gstin  # For state code detection
+USER_GSTIN=your-15-char-gstin
 ```
 
-### Frontend (`.env.local`)
-```
+Frontend (`frontend/.env.local`):
+
+```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
----
+### 4. Run services
 
-## Architecture
+```bash
+# Terminal 1
+cd backend
+python3 -m uvicorn api:app --reload --port 8000
 
-```
-Browser (Next.js + TypeScript)
-    │
-    ▼  HTTP + JWT Auth
-FastAPI Backend
-    │
-    ├── OCR (Tesseract) → Extract invoice data
-    ├── HSN Matcher (fuzzy) → Classify items
-    ├── GSTR-3B Generator → Monthly returns
-    └── Supabase → Auth + Database
+# Terminal 2
+cd frontend
+npm run dev
 ```
 
----
+- App: [http://localhost:3000](http://localhost:3000)
+- API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-## Known Limitations (MVP)
+## Docker (Optional)
 
-- Line item extraction from OCR is basic (uses total amount as single item)
-- GSTR-2A reconciliation is in demo mode
-- State code for IGST/CGST split defaults to Kerala if USER_GSTIN not set
-- No WhatsApp upload yet
-- No e-invoice generation yet
+```bash
+docker compose up --build
+```
 
----
+## API Surface (Selected)
+
+- `GET /api/health`
+- `POST /api/upload-invoice`
+- `POST /api/upload-bulk`
+- `GET /api/invoices`
+- `POST /api/generate-gstr3b`
+- `POST /api/reconcile-gstr2a` (demo behavior)
+
+## Current MVP Limitations
+
+- OCR line-item extraction is simplified for some invoice formats
+- Reconciliation endpoint currently runs in demo mode
+- Data persistence is optimized for MVP workflows, not full production scale
 
 ## License
 
-MIT
-
----
-
-Built with Python, Next.js, Tesseract OCR, and AI coding assistants.
-Inspired by the pain of 11M+ Indian SMBs struggling with GST compliance.
+MIT.

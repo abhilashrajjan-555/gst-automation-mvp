@@ -234,7 +234,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <p className="text-sm text-gray-500">
-              Built with Next.js 15 + FastAPI + Claude AI
+              Built with Next.js 16 + FastAPI + Claude AI
             </p>
             <div className="flex items-center space-x-4 mt-4 md:mt-0">
               <a
