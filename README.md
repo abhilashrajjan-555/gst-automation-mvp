@@ -13,6 +13,14 @@ This project demonstrates an end-to-end GST processing flow with a Next.js front
 - Review dashboard metrics and export processed data
 - Support authenticated usage with Supabase
 
+## Problem
+
+GST workflows for small businesses can involve repeated manual invoice review, field extraction, tax categorization, and return preparation. That is slow, error-prone, and hard to scale without a structured process.
+
+## Solution
+
+This MVP turns invoice files into a reviewable GST workflow: upload invoices, extract core fields with OCR, classify the data, and generate GSTR-3B-style outputs for review.
+
 ## Key Features
 
 - Invoice upload (`/api/upload-invoice`, `/api/upload-bulk`)
@@ -126,6 +134,14 @@ docker compose up --build
 - OCR line-item extraction is simplified for some invoice formats
 - Reconciliation endpoint currently runs in demo mode
 - Data persistence is optimized for MVP workflows, not full production scale
+
+## What This Shows
+
+- Full-stack workflow automation design
+- FastAPI backend with a Next.js frontend
+- OCR processing pipeline for document-heavy operations
+- Authenticated MVP structure using Supabase
+- Clear separation between prototype capability and production limitations
 
 ## License
 
